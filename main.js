@@ -5,7 +5,7 @@ import { FontLoader } from 'three/addons/loaders/FontLoader.js';
 
 let width = window.innerWidth;
 let height = window.innerHeight; 
-
+let count = 0;
 const rotationAxes1 = [];
 const rotationSpeeds1 = [];
 const rotationAxes2 = [];
@@ -14,11 +14,11 @@ const cubes = [];
 const toruses = [];
 const positionRange = {
     minX: -25,
-    maxX: 55,
-    minY: -40,
-    maxY: 40,
-    minZ: -35,
-    maxZ: 55,
+    maxX: 25,
+    minY: -20,
+    maxY: 20,
+    minZ: -15,
+    maxZ: 25,
   };
 
 const group = new THREE.Group();
@@ -55,7 +55,19 @@ window.addEventListener("resize", () => {
     renderer.render(scene, camera);
 })
 
-
+const listener = new THREE.AudioListener();
+camera.add(listener);
+const sound = new THREE.Audio(listener);
+const audioLoader = new THREE.AudioLoader();
+audioLoader.load('sound.ogg', function(buffer) {
+    sound.setBuffer( buffer );
+    sound.setLoop( true );
+    sound.setVolume( 0.5 );
+})
+window.addEventListener("click", e => {
+    count++;
+        (count%2) ? sound.play() : sound.pause();
+})
 
 const controls = new OrbitControls( camera, renderer.domElement );
 controls.target.set(0, 0, 0)
@@ -170,8 +182,10 @@ for(let i=0;i<100;i++) {
     const posY2 = THREE.MathUtils.randFloat(positionRange.minY, positionRange.maxY);
     const posZ2 = THREE.MathUtils.randFloat(positionRange.minZ, positionRange.maxZ);
 
-    const cube_geometry = new THREE.BoxGeometry(1, 1, 1);
-    const torus_geometry = new THREE.TorusGeometry(.8797, 0.52569, 28, 176, 6.283185307179586)
+    let a = THREE.MathUtils.randFloat(0, 1);
+    const cube_geometry = new THREE.BoxGeometry(a, a, a);
+    a = a % 0.8;
+    const torus_geometry = new THREE.TorusGeometry(a, a*0.5975, 28, 176, 6.283185307179586)
     const cube = new THREE.Mesh(cube_geometry, material);
     const torus = new THREE.Mesh(torus_geometry, material);
     cube.position.set(posX1, posY1, posZ1);
