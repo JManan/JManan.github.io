@@ -1,8 +1,12 @@
 * {
     margin: 0;
     padding: 0;
+    /* display: flex; */
 }
 
 body {
     overflow: hidden;
+    display: flex;
+    min-width: 100vw;
+    max-height: 100vh;
 }

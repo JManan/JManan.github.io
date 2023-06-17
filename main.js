@@ -3,6 +3,9 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
 import { FontLoader } from 'three/addons/loaders/FontLoader.js';
 
+let width = window.innerWidth;
+let height = window.innerHeight; 
+
 const rotationAxes1 = [];
 const rotationSpeeds1 = [];
 const rotationAxes2 = [];
@@ -10,24 +13,34 @@ const rotationSpeeds2 = [];
 const cubes = [];
 const toruses = [];
 const positionRange = {
-    minX: -55,
+    minX: -25,
     maxX: 55,
-    minY: -40,
+    minY: -20,
     maxY: 40,
-    minZ: -55,
+    minZ: -35,
     maxZ: 55,
   };
 
 const group = new THREE.Group();
 const o2m = new THREE.Group();
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+const camera = new THREE.PerspectiveCamera( 75, width/height, 0.1, 1000 );
 
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
 
+window.addEventListener("resize", () => {
+    width = innerWidth;
+    height = innerHeight;
+    camera.aspect = width / height;
+    camera.updateProjectionMatrix();
+    renderer.setSize(width, height);
+    renderer.render(scene, camera);
+})
+
 const controls = new OrbitControls( camera, renderer.domElement );
+controls.target.set(0, 0, 0)
 const material = new THREE.MeshNormalMaterial();
 
 const loader = new FontLoader();
@@ -162,7 +175,7 @@ scene.add(o2m);
 camera.position.z = 8;
 controls.maxDistance = 8;
 controls.enableDamping = true;
-controls.dampingFactor = 0.1;
+controls.dampingFactor = 0.065;
 controls.enableZoom = true;
 controls.autoRotate = false;
 controls.enablePan = true;
@@ -170,26 +183,28 @@ controls.enableKeys = false;
 controls.enableRotate = true;
 controls.update();
 
-camera.rotation.set(0, 0, 0)
+camera.position.set(0, 0, 8);
 
 const animate = () => {
-    requestAnimationFrame( animate );
-    controls.update();
+    // updateCameraPosition();
     for (let i = 0; i < 100; i++) {
         const cube = cubes[i];
         const torus = toruses[i];
         const rotationAxis1 = rotationAxes1[i];
         const rotationSpeed1 = rotationSpeeds1[i];
-
+        
         const rotationAxis2 = rotationAxes2[i];
         const rotationSpeed2 = rotationSpeeds2[i];
-    
+        
         const quaternion1 = new THREE.Quaternion().setFromAxisAngle(rotationAxis1, rotationSpeed1);
         cube.quaternion.multiplyQuaternions(quaternion1, cube.quaternion);
-
+        
         const quaternion2 = new THREE.Quaternion().setFromAxisAngle(rotationAxis2, rotationSpeed2);
         torus.quaternion.multiplyQuaternions(quaternion2, torus.quaternion);
-      }
-	renderer.render( scene, camera );}
+    }
+	renderer.render( scene, camera );
+    controls.update();
+    requestAnimationFrame( animate );
+}   
 
 animate()
