@@ -15,7 +15,7 @@ const toruses = [];
 const positionRange = {
     minX: -25,
     maxX: 55,
-    minY: -20,
+    minY: -40,
     maxY: 40,
     minZ: -35,
     maxZ: 55,
@@ -54,6 +54,8 @@ window.addEventListener("resize", () => {
     renderer.setSize(width, height);
     renderer.render(scene, camera);
 })
+
+
 
 const controls = new OrbitControls( camera, renderer.domElement );
 controls.target.set(0, 0, 0)
@@ -161,7 +163,7 @@ loader.load('blanka.json', function (font) {
 });
   
 for(let i=0;i<100;i++) {
-    const posX1 = THREE.MathUtils.randFloat(positionRange.minX,  positionRange.maxX);
+    const posX1 = THREE.MathUtils.randFloat(positionRange.minX,  positionRange.maxX) 
     const posY1 = THREE.MathUtils.randFloat(positionRange.minY, positionRange.maxY);
     const posZ1 = THREE.MathUtils.randFloat(positionRange.minZ, positionRange.maxZ);
     const posX2 = THREE.MathUtils.randFloat(positionRange.minX,  positionRange.maxX);
@@ -174,13 +176,19 @@ for(let i=0;i<100;i++) {
     const torus = new THREE.Mesh(torus_geometry, material);
     cube.position.set(posX1, posY1, posZ1);
     torus.position.set(posX2, posY2, posZ2);
+    torus.rotation.x = Math.random() * Math.PI * 2; 
+    torus.rotation.y = Math.random() * Math.PI * 2; 
+    torus.rotation.z = Math.random() * Math.PI * 2;
+    cube.rotation.x = torus.rotation.x;
+    cube.rotation.y = torus.rotation.y;
+    cube.rotation.z = torus.rotation.z;
     cubes.push(cube);
     toruses.push(torus);
     rotationAxes1.push(new THREE.Vector3(posX1, posY1, posZ1).normalize());
     rotationAxes2.push(new THREE.Vector3(posX2, posY2, posZ2).normalize());
-    const num = THREE.MathUtils.randFloat(0, 1);
-    rotationSpeeds1.push(0.01 + num*0.001);
-    rotationSpeeds2.push(0.01 + num*0.0015);
+
+    rotationSpeeds1.push(0.01);
+    rotationSpeeds2.push(0.01);
     o2m.add(cube);
     o2m.add(torus);
 }
