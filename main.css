@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@500&display=swap');
+
 * {
     margin: 0;
     padding: 0;
@@ -9,4 +11,12 @@ body {
     display: flex;
     min-width: 100vw;
     max-height: 100vh;
+}
+
+.btn {
+    font-family: 'Roboto Mono', monospace;
+    position: fixed;
+    bottom: 2%;
+    left: 50%;
+    color: white;
 }

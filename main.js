@@ -30,6 +30,22 @@ const renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
 
+// document.getElementsByTagName("BODY").onclick = () => {
+//     console.log("hi")
+//     const listener = new THREE.AudioListener();
+//     camera.add(listener);
+    
+//     const sound = new THREE.Audio(listener);
+    
+//     const audioLoader = new THREE.AudioLoader();
+//     audioLoader.load('sound.ogg', function(buffer) {
+//         sound.setBuffer( buffer );
+//         sound.setLoop( true );
+//         sound.setVolume( 0.5 );
+//         sound.play();
+//     })
+// }
+
 window.addEventListener("resize", () => {
     width = innerWidth;
     height = innerHeight;
