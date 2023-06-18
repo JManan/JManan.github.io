@@ -6,7 +6,8 @@ import { FontLoader } from 'three/addons/loaders/FontLoader.js';
 let width = window.innerWidth;
 let height = window.innerHeight; 
 let count = 0;
-
+let time = 0;
+let group = new THREE.Group();
 const rotationAxes1 = [];
 const rotationSpeeds1 = [];
 const rotationAxes2 = [];
@@ -22,8 +23,6 @@ const positionRange = {
     maxZ: 22,
   };
 
-const group = new THREE.Group();
-const o2m = new THREE.Group();
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera( 75, width/height, 0.1, 1000 );
 
@@ -67,8 +66,9 @@ loader.load('anurati.json', function (font){
     } );
     const text1 = new THREE.Mesh(text1_geometry, material);
     text1.position.set(-3.5, 0, 0)
+    scene.add(text1);
     group.add(text1);
-} );
+});
 
 loader.load('blanka.json', function (font) {
     const text2_geometry = new TextGeometry(' YEAH ITS TIME TO CODE', {
@@ -84,8 +84,7 @@ loader.load('blanka.json', function (font) {
     });
     const text2 = new THREE.Mesh(text2_geometry, material);
     text2.position.set(-4, -2, 0)
-    group.add(text2);
-
+  
     const a_geometry = new TextGeometry('    DJANGO \n DEVELOPER', {
         font: font,
         size:1,
@@ -100,7 +99,6 @@ loader.load('blanka.json', function (font) {
     const a = new THREE.Mesh(a_geometry, material);
     a.position.set(3, 5, -6);
     a.lookAt(-3.5, 0, 0);
-    group.add(a);
 
     const b_geometry = new TextGeometry('          ENI\n @BITS PILANI', {
         font: font,
@@ -116,7 +114,6 @@ loader.load('blanka.json', function (font) {
     const b = new THREE.Mesh(b_geometry, material);
     b.position.set(-14, 3, -3);
     b.lookAt(-3.5, 0, 0);
-    group.add(b);
 
     const c_geometry = new TextGeometry('     REACT \n DEVELOPER', {
         font: font,
@@ -133,7 +130,6 @@ loader.load('blanka.json', function (font) {
     c.position.set(-6, 7, 13);
     c.rotateY(Math.PI);
     c.lookAt(-3.5, 0, 0);
-    group.add(c);
 
     const d_geometry = new TextGeometry('FULL STACK\nDEVELOPER', {
         font: font,
@@ -150,7 +146,7 @@ loader.load('blanka.json', function (font) {
     d.position.set(14, -3, 10);
     d.rotateY(Math.PI);
     d.lookAt(-3.5, 0, 0);
-    group.add(d);
+    group.add(text2, a,b, c, d);
 });
   
 for(let i=0;i<175;i++) {
@@ -181,12 +177,10 @@ for(let i=0;i<175;i++) {
     rotationAxes2.push(new THREE.Vector3(posX2, posY2, posZ2).normalize());
     rotationSpeeds1.push(0.01);
     rotationSpeeds2.push(0.01);
-    o2m.add(cube);
-    o2m.add(torus);
+    group.add(cube, torus);
 }
 
 scene.add(group);
-scene.add(o2m);
 
 const controls = new OrbitControls( camera, renderer.domElement );
 camera.position.z = 8;
@@ -198,8 +192,6 @@ controls.autoRotate = false;
 controls.enablePan = true;
 controls.enableKeys = false;
 controls.enableRotate = true;
-// controls.mouseButtons.RIGHT = THREE.MOUSE.ROTATE;
-// controls.mouseButtons.LEFT = THREE.MOUSE.PAN;
 
 camera.position.set(0, 0, 8);
 
@@ -232,6 +224,9 @@ const animate = () => {
         const quaternion2 = new THREE.Quaternion().setFromAxisAngle(rotationAxis2, rotationSpeed2);
         torus.quaternion.multiplyQuaternions(quaternion2, torus.quaternion);
     }
+    time += 0.01
+    group.rotation.z = 0.4 * Math.sin(time)
+    group.rotation.x = 0.3 * Math.cos(time)
 	renderer.render( scene, camera );
     controls.update();
     requestAnimationFrame( animate );
