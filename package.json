@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@vercel/analytics": "^1.0.1",
     "three": "^0.153.0"
   },
   "devDependencies": {
