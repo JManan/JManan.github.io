@@ -6,6 +6,7 @@ import { FontLoader } from 'three/addons/loaders/FontLoader.js';
 let width = window.innerWidth;
 let height = window.innerHeight; 
 let count = 0;
+
 const rotationAxes1 = [];
 const rotationSpeeds1 = [];
 const rotationAxes2 = [];
@@ -13,12 +14,12 @@ const rotationSpeeds2 = [];
 const cubes = [];
 const toruses = [];
 const positionRange = {
-    minX: -25,
+    minX: -20,
     maxX: 25,
-    minY: -20,
+    minY: -15,
     maxY: 20,
     minZ: -15,
-    maxZ: 25,
+    maxZ: 22,
   };
 
 const group = new THREE.Group();
@@ -49,8 +50,6 @@ audioLoader.load('sound.ogg', function(buffer) {
     sound.setVolume( 0.5 );
 })
 
-const controls = new OrbitControls( camera, renderer.domElement );
-controls.target.set(0, 0, 0)
 const material = new THREE.MeshNormalMaterial();
 
 const loader = new FontLoader();
@@ -154,7 +153,7 @@ loader.load('blanka.json', function (font) {
     group.add(d);
 });
   
-for(let i=0;i<100;i++) {
+for(let i=0;i<175;i++) {
     const posX1 = THREE.MathUtils.randFloat(positionRange.minX,  positionRange.maxX) 
     const posY1 = THREE.MathUtils.randFloat(positionRange.minY, positionRange.maxY);
     const posZ1 = THREE.MathUtils.randFloat(positionRange.minZ, positionRange.maxZ);
@@ -180,7 +179,6 @@ for(let i=0;i<100;i++) {
     toruses.push(torus);
     rotationAxes1.push(new THREE.Vector3(posX1, posY1, posZ1).normalize());
     rotationAxes2.push(new THREE.Vector3(posX2, posY2, posZ2).normalize());
-
     rotationSpeeds1.push(0.01);
     rotationSpeeds2.push(0.01);
     o2m.add(cube);
@@ -190,6 +188,7 @@ for(let i=0;i<100;i++) {
 scene.add(group);
 scene.add(o2m);
 
+const controls = new OrbitControls( camera, renderer.domElement );
 camera.position.z = 8;
 controls.maxDistance = 8;
 controls.enableDamping = true;
@@ -199,14 +198,13 @@ controls.autoRotate = false;
 controls.enablePan = true;
 controls.enableKeys = false;
 controls.enableRotate = true;
-controls.update();
+// controls.mouseButtons.RIGHT = THREE.MOUSE.ROTATE;
+// controls.mouseButtons.LEFT = THREE.MOUSE.PAN;
 
 camera.position.set(0, 0, 8);
 
 const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();
-
-
 window.addEventListener("click", (e) => {
     pointer.x = e.clientX/window.innerWidth * 2 - 1;
     pointer.y =  - e.clientY/window.innerHeight * 2 + 1;
@@ -218,9 +216,8 @@ window.addEventListener("click", (e) => {
     }
 });
 
-
 const animate = () => {
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 175; i++) {
         const cube = cubes[i];
         const torus = toruses[i];
         const rotationAxis1 = rotationAxes1[i];
@@ -238,6 +235,6 @@ const animate = () => {
 	renderer.render( scene, camera );
     controls.update();
     requestAnimationFrame( animate );
-}   
+}
 
 animate()
