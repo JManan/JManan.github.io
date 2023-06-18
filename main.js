@@ -149,7 +149,7 @@ loader.load('blanka.json', function (font) {
     group.add(text2, a,b, c, d);
 });
   
-for(let i=0;i<175;i++) {
+for(let i=0;i<150;i++) {
     const posX1 = THREE.MathUtils.randFloat(positionRange.minX,  positionRange.maxX) 
     const posY1 = THREE.MathUtils.randFloat(positionRange.minY, positionRange.maxY);
     const posZ1 = THREE.MathUtils.randFloat(positionRange.minZ, positionRange.maxZ);
@@ -209,7 +209,7 @@ window.addEventListener("click", (e) => {
 });
 
 const animate = () => {
-    for (let i = 0; i < 175; i++) {
+    for (let i = 0; i < 150; i++) {
         const cube = cubes[i];
         const torus = toruses[i];
         const rotationAxis1 = rotationAxes1[i];
