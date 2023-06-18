@@ -30,22 +30,6 @@ const renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
 
-// document.getElementsByTagName("BODY").onclick = () => {
-//     console.log("hi")
-//     const listener = new THREE.AudioListener();
-//     camera.add(listener);
-    
-//     const sound = new THREE.Audio(listener);
-    
-//     const audioLoader = new THREE.AudioLoader();
-//     audioLoader.load('sound.ogg', function(buffer) {
-//         sound.setBuffer( buffer );
-//         sound.setLoop( true );
-//         sound.setVolume( 0.5 );
-//         sound.play();
-//     })
-// }
-
 window.addEventListener("resize", () => {
     width = innerWidth;
     height = innerHeight;
@@ -63,10 +47,6 @@ audioLoader.load('sound.ogg', function(buffer) {
     sound.setBuffer( buffer );
     sound.setLoop( true );
     sound.setVolume( 0.5 );
-})
-window.addEventListener("click", e => {
-    count++;
-        (count%2) ? sound.play() : sound.pause();
 })
 
 const controls = new OrbitControls( camera, renderer.domElement );
@@ -223,8 +203,23 @@ controls.update();
 
 camera.position.set(0, 0, 8);
 
+const raycaster = new THREE.Raycaster();
+const pointer = new THREE.Vector2();
+
+
+window.addEventListener("click", (e) => {
+    pointer.x = e.clientX/window.innerWidth * 2 - 1;
+    pointer.y =  - e.clientY/window.innerHeight * 2 + 1;
+    raycaster.setFromCamera(pointer, camera);
+    const intersects = raycaster.intersectObjects(scene.children);
+    if(intersects.length > 0){
+        count++;
+        count % 2 ? sound.play() : sound.pause();
+    }
+});
+
+
 const animate = () => {
-    // updateCameraPosition();
     for (let i = 0; i < 100; i++) {
         const cube = cubes[i];
         const torus = toruses[i];
